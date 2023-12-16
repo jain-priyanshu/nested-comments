@@ -81,11 +81,11 @@ $app->group('/users', function($app){
             if($result){
                 $user_id = $result['user_id'];
                 $secretKey = $_ENV['SECRET_KEY'];
-                $expirationTime = time() + 3600; // 1 hour
+                //$expirationTime = time() + 3600; // 1 hour
 
                 $payload = [
                     'user_id' => $user_id,
-                    'exp' => $expirationTime
+                    'username' => $username
                 ];
 
                 $token = JWT::encode($payload, $secretKey, 'HS256');
