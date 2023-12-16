@@ -13,7 +13,6 @@ $dotenv->load();
 $app = AppFactory::create();
 
 $app->group('/users', function($app){
-
     // Register
     $app->post('/register[/]', function(Request $req, Response $res){
         try{
