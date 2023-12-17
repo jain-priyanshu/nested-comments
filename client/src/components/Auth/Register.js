@@ -1,36 +1,91 @@
-import React from "react";
+import { React, useEffect, useState } from "react";
 import "./Auth.css";
+import { useUser } from "../../context/user/userContext";
+import { Navigate } from "react-router-dom";
+import Spinner from "../Layout/Spinner";
+import Navbar from "../Layout/Navbar";
 
 export default function Register() {
-  return (
-    <div className="container">
-      <div className="box">
-        <h2>Create an Account</h2>
-        <form action="#" method="post">
-          <label htmlFor="username"></label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            placeholder="Username *"
-            required
-          />
+    const { login, isAuth } = useUser();
+    const [isLoading, setIsLoading] = useState(true);
 
-          <label htmlFor="password"></label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="Password *"
-            required
-          />
+    const [user, setUser] = useState({
+        username: "",
+        password: "",
+    });
 
-          <button type="submit">Register</button>
-        </form>
-        <p className="link">
-          Already have an account? <a href="/Login">Login</a>
-        </p>
-      </div>
-    </div>
-  );
+    const { username, password } = user;
+
+    const values = { username, password };
+
+    const handleChange = (e) => {
+        setUser({
+            ...user,
+            [e.target.name]: e.target.value,
+        });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        login(values);
+    };
+
+    useEffect(() => {
+        const checkAuthenticationStatus = async () => {
+            await new Promise((resolve) => setTimeout(resolve, 200));
+            setIsLoading(false);
+        };
+
+        checkAuthenticationStatus();
+    }, []);
+
+    if (isLoading) {
+        return <Spinner />;
+    }
+
+    if (isAuth) {
+        return <Navigate to="/" />;
+    }
+
+    return (
+        <>
+            <Navbar />
+            <div className="container lgn-container">
+                <div className="box lgn-box">
+                    <h2 className="lgn-heading">Create an Account</h2>
+                    <form className="lgn-form" action="#" method="post">
+                        <label htmlFor="username" className="lgn-label"></label>
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="Username *"
+                            required
+                            className="lgn-input"
+                        />
+
+                        <label htmlFor="password" className="lgn-label"></label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Password *"
+                            required
+                            className="lgn-input"
+                        />
+
+                        <button type="submit" className="lgn-btn">
+                            Register
+                        </button>
+                    </form>
+                    <p className="link lgn-link">
+                        Already have an account?{" "}
+                        <a href="/login" className="lgn-link">
+                            Login
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </>
+    );
 }

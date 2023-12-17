@@ -5,7 +5,7 @@ use Slim\Factory\AppFactory;
 use Firebase\JWT\JWT;
 use Dotenv\Dotenv;
 
-// require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/../middleware/auth.php';
 
 $dotenv = Dotenv::createImmutable('../');
 $dotenv->load();
@@ -13,6 +13,7 @@ $dotenv->load();
 $app = AppFactory::create();
 
 $app->group('/users', function($app){
+
     // Register
     $app->post('/register[/]', function(Request $req, Response $res){
         try{
@@ -85,12 +86,13 @@ $app->group('/users', function($app){
                 $payload = [
                     'user_id' => $user_id,
                     'username' => $username
+                    //'exp' => time() + 3600, // 1 hr
                 ];
 
                 $token = JWT::encode($payload, $secretKey, 'HS256');
 
                 return $res->withJson([
-                    'token' => $token, 'user_id' => $user_id
+                    'token' => $token
                 ], 200);
             }
             else{
@@ -123,5 +125,24 @@ $app->group('/users', function($app){
             return $res->withJson(['message' => $e->getMessage], 500);
         }
     });
+
+    // get current user
+    $app->get('/current[/]', function(Request $req, Response $res){
+        try{
+            $db = Database::getInstance()->getConnection();
+            $user_id = $req->getAttribute('user_id');
+            $stmt = $db->prepare('SELECT * FROM USERS WHERE user_id = :user_id');
+            $stmt->bindParam(':user_id', $user_id);
+            $stmt->execute();
+            $data = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+            $res->getBody()->write(json_encode($data));
+            return $res->withHeader('content-type', 'application/json');
+
+
+        } catch(PDOException $e){
+            return $res->withJson(['message' => $e->getMessage], 500);
+        }
+    })->add('authMiddleware');
 
 });

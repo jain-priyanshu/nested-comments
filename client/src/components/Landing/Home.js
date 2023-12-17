@@ -1,14 +1,17 @@
-import React from 'react'
-import Login from '../Auth/Login';
-import Register from '../Auth/Register';
+import React from "react";
+import { useUser } from "../../context/user/userContext";
+import Navbar from "../Layout/Navbar";
 
 const Home = () => {
-  return (
-    <>
-      Go to /login or /register :)
-    </>
+    const { isAuth, logout } = useUser();
 
-  )
-}
+    return (
+        <div>
+            <Navbar />
+            <br></br>
+            Comments Coming Soon......?
+        </div>
+    );
+};
 
 export default Home;

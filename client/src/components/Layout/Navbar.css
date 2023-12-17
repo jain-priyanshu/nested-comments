@@ -1,0 +1,57 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+}
+
+body{
+    padding-top: 60px;
+}
+
+.navbar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 15px 25px 15px 25px;
+    background-color: #2c2c2d; /* Matched with the login page background color */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+
+
+.logo {
+    margin-right: auto;
+    text-decoration: none;
+    color: #fff; /* Matched with the login page text color */
+    font-weight: bold; /* Added for consistency with login page font */
+}
+
+.nav__links {
+    list-style: none;
+    display: flex;
+}
+
+.nav__links a,
+.cta,
+.overlay__content a {
+    font-family: "Arial", sans-serif; /* Matched with the login page font family */
+    font-weight: bold; /* Matched with the login page font weight */
+    color: #fff;
+    text-decoration: none;
+}
+
+.nav__links li {
+    padding: 0px 20px;
+}
+
+.nav__links li a,
+.logo {
+    transition: all 0.3s ease 0s;
+}
+
+.nav__links li a:hover, .logo:hover {
+    color: #3498db; /* Matched with the login page button hover color */
+}
