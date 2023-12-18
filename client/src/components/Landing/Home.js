@@ -1,15 +1,25 @@
-import React from "react";
-import { useUser } from "../../context/user/userContext";
+import { React, useEffect } from "react";
+import { useUser } from "../../context/userContext";
 import Navbar from "../Layout/Navbar";
+import Spinner from "../Layout/Spinner";
+import BlogsList from "../Blog/BlogsList";
 
 const Home = () => {
-    const { isAuth, logout } = useUser();
+    const { blogs, getBlogs } = useUser();
+
+    useEffect(() => {
+        getBlogs();
+    }, []);
+
+    if (!blogs) {
+        return <Spinner />;
+    }
 
     return (
         <div>
             <Navbar />
             <br></br>
-            Comments Coming Soon......?
+            <BlogsList blogs={blogs} />
         </div>
     );
 };

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
-import setAuthToken from "../../utils/setToken";
+import setAuthToken from "../utils/setToken";
 
 const UserContext = createContext();
 
@@ -8,6 +8,7 @@ export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [isAuth, setAuth] = useState(false);
     const token = localStorage.getItem("token");
+    const [blogs, setBlogs] = useState(null);
 
     const loadUser = async () => {
         if (localStorage.token) {
@@ -72,6 +73,21 @@ export const UserProvider = ({ children }) => {
         setAuth(false);
     };
 
+    const getBlogs = async () => {
+        const config = {
+            headers: {
+                "Content-Type": "Application/JSON",
+            },
+        };
+        try {
+            const res = await axios.get("http://localhost/blogs/all", config);
+            setBlogs(res.data);
+            console.log(res.data);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     useEffect(() => {
         setAuthToken(token);
     }, [token]);
@@ -86,6 +102,8 @@ export const UserProvider = ({ children }) => {
         login,
         register,
         logout,
+        blogs,
+        getBlogs,
     };
 
     return (

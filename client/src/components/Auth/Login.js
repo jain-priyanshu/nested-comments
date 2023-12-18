@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./Auth.css";
-import { useUser } from "../../context/user/userContext";
+import { useUser } from "../../context/userContext";
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import Spinner from "../Layout/Spinner";

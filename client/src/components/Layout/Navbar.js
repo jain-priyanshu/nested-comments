@@ -1,6 +1,6 @@
 import { React } from "react";
 import "../Layout/Navbar.css";
-import { useUser } from "../../context/user/userContext";
+import { useUser } from "../../context/userContext";
 
 const Navbar = () => {
     const { logout } = useUser();

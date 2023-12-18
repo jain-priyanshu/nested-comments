@@ -12,6 +12,7 @@ require __DIR__ . '/../config/db.php';
 $app = AppFactory::create();
 
 require __DIR__ . '/../routes/users.php';
+require __DIR__ . '/../routes/blogs.php';
 
 // home test
 $app->get('/', function (Request $request, Response $response) {

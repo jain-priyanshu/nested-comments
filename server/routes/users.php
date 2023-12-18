@@ -10,8 +10,6 @@ require __DIR__ . '/../middleware/auth.php';
 $dotenv = Dotenv::createImmutable('../');
 $dotenv->load();
 
-$app = AppFactory::create();
-
 $app->group('/users', function($app){
 
     // Register
