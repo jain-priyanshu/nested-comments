@@ -7,11 +7,11 @@ const Navbar = () => {
 
     return (
         <div className="navbar">
-            <a class="logo" href="/">
+            <a className="logo" href="/">
                 Home
             </a>
-            <div class="nav-list">
-                <ul class="nav__links">
+            <div className="nav-list">
+                <ul className="nav__links">
                     <li>
                         <a href="/login">Login</a>
                     </li>

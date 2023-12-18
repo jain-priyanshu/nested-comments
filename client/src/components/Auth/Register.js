@@ -6,7 +6,7 @@ import Spinner from "../Layout/Spinner";
 import Navbar from "../Layout/Navbar";
 
 export default function Register() {
-    const { login, isAuth } = useUser();
+    const { register, isAuth } = useUser();
     const [isLoading, setIsLoading] = useState(true);
 
     const [user, setUser] = useState({
@@ -27,7 +27,7 @@ export default function Register() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        login(values);
+        register(values);
     };
 
     useEffect(() => {
@@ -53,13 +53,20 @@ export default function Register() {
             <div className="container lgn-container">
                 <div className="box lgn-box">
                     <h2 className="lgn-heading">Create an Account</h2>
-                    <form className="lgn-form" action="#" method="post">
+                    <form
+                        className="lgn-form"
+                        action=""
+                        onSubmit={handleSubmit}
+                        method="post"
+                    >
                         <label htmlFor="username" className="lgn-label"></label>
                         <input
                             type="text"
                             id="username"
                             name="username"
                             placeholder="Username *"
+                            value={values.username}
+                            onChange={handleChange}
                             required
                             className="lgn-input"
                         />
@@ -70,6 +77,8 @@ export default function Register() {
                             id="password"
                             name="password"
                             placeholder="Password *"
+                            value={values.password}
+                            onChange={handleChange}
                             required
                             className="lgn-input"
                         />

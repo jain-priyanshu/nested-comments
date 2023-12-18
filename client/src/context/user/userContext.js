@@ -23,6 +23,7 @@ export const UserProvider = ({ children }) => {
         }
     };
 
+    // login
     const login = async (formData) => {
         const config = {
             headers: {
@@ -37,11 +38,35 @@ export const UserProvider = ({ children }) => {
             );
             setAuth(true);
             localStorage.setItem("token", res.data.token);
+            loadUser();
         } catch (err) {
             console.log(err);
         }
     };
 
+    // register
+    const register = async (formData) => {
+        const config = {
+            hedaers: {
+                "Content-Type": "application/JSON",
+            },
+        };
+
+        try {
+            const res = await axios.post(
+                "http://localhost/users/register",
+                formData,
+                config
+            );
+            setAuth(true);
+            localStorage.setItem("token", res.data.token);
+            loadUser();
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    // logout
     const logout = () => {
         localStorage.removeItem("token");
         setAuth(false);
@@ -59,6 +84,7 @@ export const UserProvider = ({ children }) => {
         user,
         isAuth,
         login,
+        register,
         logout,
     };
 

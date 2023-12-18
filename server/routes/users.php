@@ -48,9 +48,35 @@ $app->group('/users', function($app){
             $stmt->bindParam(':password', $password);
             $stmt->execute();
 
-            $result = ['message' => 'User registered successfully'];
+            $sql = 'SELECT user_id FROM USERS WHERE USERNAME = :username';
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam(':username', $username);
+            $stmt->execute();
 
-            return $res->withJson($result, 200);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if($result){
+                $user_id = $result['user_id'];
+                $secretKey = $_ENV['SECRET_KEY'];
+
+                $payload = [
+                    'user_id' => $user_id,
+                    'username' => $username
+                    //'exp' => time() + 3600, // 1 hr
+                ];
+
+                $token = JWT::encode($payload, $secretKey, 'HS256');
+
+                return $res->withJson([
+                    'token' => $token
+                ], 200);
+            }
+            else{
+                return $res->withJson([
+                    'message' => 'User registered with error'
+                ], 500);
+            }
+
 
         } catch(PDOException $e){
             return $res->withJson(['message' => $e->getMessage()], 500);
@@ -81,7 +107,6 @@ $app->group('/users', function($app){
             if($result){
                 $user_id = $result['user_id'];
                 $secretKey = $_ENV['SECRET_KEY'];
-                //$expirationTime = time() + 3600; // 1 hour
 
                 $payload = [
                     'user_id' => $user_id,
