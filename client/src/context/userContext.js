@@ -9,6 +9,7 @@ export const UserProvider = ({ children }) => {
     const [isAuth, setAuth] = useState(false);
     const token = localStorage.getItem("token");
     const [blogs, setBlogs] = useState(null);
+    const [currBlog, setCurrBlog] = useState(null);
 
     const loadUser = async () => {
         if (localStorage.token) {
@@ -74,17 +75,20 @@ export const UserProvider = ({ children }) => {
     };
 
     const getBlogs = async () => {
-        const config = {
-            headers: {
-                "Content-Type": "Application/JSON",
-            },
-        };
         try {
-            const res = await axios.get("http://localhost/blogs/all", config);
+            const res = await axios.get("http://localhost/blogs/all");
             setBlogs(res.data);
-            console.log(res.data);
         } catch (err) {
             console.log(err);
+        }
+    };
+
+    const getBlogById = async (id) => {
+        try {
+            const res = await axios.get(`http://localhost/blogs/${id}`);
+            setCurrBlog(res.data);
+        } catch (err) {
+            console.error(err);
         }
     };
 
@@ -99,11 +103,13 @@ export const UserProvider = ({ children }) => {
     const contextValue = {
         user,
         isAuth,
+        blogs,
+        currBlog,
         login,
         register,
         logout,
-        blogs,
         getBlogs,
+        getBlogById,
     };
 
     return (

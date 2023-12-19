@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./BlogItem.css";
+import "./Blog.css";
 
 const BlogItem = ({ blog }) => {
     const { blog_id, title, body } = blog;

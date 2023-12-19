@@ -1,6 +1,6 @@
 import React from "react";
 import BlogItem from "./BlogItem";
-import "./BlogItem.css";
+import "./Blog.css";
 
 const BlogsList = ({ blogs }) => {
     return (
