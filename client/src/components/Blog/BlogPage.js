@@ -3,15 +3,19 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "../Layout/Navbar";
 import Spinner from "../Layout/Spinner";
+import CommentForm from "../Comment/CommentForm";
+import CommentList from "../Comment/CommentList";
 import { useUser } from "../../context/userContext";
 import "./Blog.css";
 
 const BlogPage = () => {
     const { id } = useParams();
-    const { getBlogById, currBlog } = useUser();
+    const { getBlogById, currBlog, getComments, parentComments, comments } =
+        useUser();
 
     useEffect(() => {
         getBlogById(id);
+        getComments(id);
     }, []);
 
     if (!currBlog) {
@@ -28,9 +32,16 @@ const BlogPage = () => {
                     <div className="blog-page-body">{currBlog.body}</div>
                 </div>
             </div>
-            <br></br>
-            Comments:
-            <br></br>
+            <section>
+                <CommentForm />
+                <br />
+                {parentComments != null && parentComments.length > 0 && (
+                    <div className="comment-list">
+                        <CommentList comments={parentComments} />
+                    </div>
+                )}
+            </section>
+            <br />
         </div>
     );
 };
