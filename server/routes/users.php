@@ -149,7 +149,7 @@ $app->group('/users', function($app){
         }
     });
 
-    // get current user
+    // PRIVATE ROUTE: get current user
     $app->get('/current[/]', function(Request $req, Response $res){
         try{
             $db = Database::getInstance()->getConnection();

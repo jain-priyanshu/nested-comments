@@ -21,7 +21,6 @@ const BlogPage = () => {
     return (
         <div>
             <Navbar />
-
             <div className="blog-page-container">
                 <div className="blog-page-box">
                     <h1 className="blog-page-title">{currBlog.title}</h1>
@@ -29,6 +28,9 @@ const BlogPage = () => {
                     <div className="blog-page-body">{currBlog.body}</div>
                 </div>
             </div>
+            <br></br>
+            Comments:
+            <br></br>
         </div>
     );
 };
