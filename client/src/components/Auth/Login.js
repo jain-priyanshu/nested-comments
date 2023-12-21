@@ -8,7 +8,7 @@ import Spinner from "../Layout/Spinner";
 import Navbar from "../Layout/Navbar";
 
 const Login = () => {
-    const { login, isAuth } = useUser();
+    const { login, isAuth, error } = useUser();
     const [isLoading, setIsLoading] = useState(true);
 
     const [user, setUser] = useState({
@@ -94,6 +94,7 @@ const Login = () => {
                             Sign up
                         </a>
                     </p>
+                    <div className="error-msg">{error}</div>
                 </div>
             </div>
         </>

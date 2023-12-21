@@ -4,16 +4,18 @@ import CommentForm from "./CommentForm";
 import CommentList from "./CommentList";
 import { FaEdit, FaHeart, FaRegHeart, FaReply } from "react-icons/fa";
 import { useUser } from "../../context/userContext";
+import "./test.css";
 
 const Comment = ({
     comment_id,
     body,
-    user_id,
+    username,
     created_at,
     likes,
     likedByMe,
 }) => {
     const [isReplying, setIsReplying] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
 
     const { getReplies } = useUser();
     const [hideReplies, setHideReplies] = useState(false);
@@ -28,15 +30,18 @@ const Comment = ({
         <div className="test">
             <div className="comment">
                 <div className="header">
-                    <span className="name">Name</span>
+                    <span className="name">{username}</span>
                     <span className="date">
                         {dateFormatter.format(Date.parse(created_at))}
                     </span>
                 </div>
-                <div className="message">{body}</div>
+                {isEditing ? (
+                    <CommentForm autoFocus initialValue={body} />
+                ) : (
+                    <div className="message">{body}</div>
+                )}
                 <div className="footer">
                     <IconBtn
-                        disabled=""
                         Icon={likedByMe ? FaHeart : FaRegHeart}
                         aria-label={likedByMe ? "Unlike" : "Like"}
                     >

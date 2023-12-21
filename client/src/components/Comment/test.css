@@ -127,11 +127,11 @@ button {
 }
 
 .btn.icon-btn {
-    background: none;
+    background-color:#ccc;
     color: var(--color);
     padding: 0.25em;
-    display: flex;
     align-items: center;
+    width: 40px;
 }
 
 .mr-1 {

@@ -66,7 +66,8 @@ $app->group('/users', function($app){
                 $token = JWT::encode($payload, $secretKey, 'HS256');
 
                 return $res->withJson([
-                    'token' => $token
+                    'token' => $token,
+                    'user_id' => $user_id
                 ], 200);
             }
             else{
@@ -115,7 +116,8 @@ $app->group('/users', function($app){
                 $token = JWT::encode($payload, $secretKey, 'HS256');
 
                 return $res->withJson([
-                    'token' => $token
+                    'token' => $token,
+                    'user_id' => $user_id
                 ], 200);
             }
             else{

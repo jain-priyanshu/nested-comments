@@ -1,18 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, Children } from "react";
+import { useUser } from "../../context/userContext";
 import "./test.css";
 
 const CommentForm = ({
     loading,
-    error,
     onSubmit,
     autoFocus = false,
     initialValue = "",
+    blog_id,
+    parent_id = "",
+    user_id,
 }) => {
     const [message, setMessage] = useState(initialValue);
+    const { error } = useUser();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSubmit(message).then(() => setMessage(""));
+        const values = {
+            body: message,
+            blog_id: blog_id,
+            user_id: user_id,
+            parent_id: parent_id,
+        };
+        onSubmit(values).then(() => setMessage(""));
     };
 
     return (

@@ -5,57 +5,6 @@ use Slim\Factory\AppFactory;
 
 $app->group('/comments', function($app){
 
-    // get all "parent" comments for a blog_id
-    $app->get('/parent/{blog_id}[/]', function(Request $req, Response $res){
-        $blog_id = $req->getAttribute('blog_id');
-
-        try{
-            $db = Database::getInstance()->getConnection();
-            $sql = "SELECT * FROM comments WHERE blog_id = :blog_id AND parent_id IS NULL";
-            $stmt = $db->prepare($sql);
-            $stmt->bindParam(':blog_id', $blog_id);
-            $stmt->execute();
-
-            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            $res->getBody()->write(json_encode($data));
-
-            return $res->withHeader('content-type', 'application/json');
-
-
-        } catch(PDOException $e){
-            return $res->withJson(['message' => $e->getMessage()], 500);
-        }
-
-        $res->getBody()->write($blog_id);
-        return $res;
-    });
-
-    // gets all child comments for a parent_id
-    $app->get('/child/{parent_id}[/]', function(Request $req, Response $res){
-        $parent_id = $req->getAttribute('parent_id');
-
-        try{
-            $db = Database::getInstance()->getConnection();
-
-            $sql = "SELECT * FROM comments WHERE parent_id = :parent_id";
-            $stmt = $db->prepare($sql);
-            $stmt->bindParam(':parent_id', $parent_id);
-            $stmt->execute();
-            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            $res->getBody()->write(json_encode($data));
-
-            return $res->withHeader('content-type', 'application/json');
-
-        } catch(PDOException $e){
-            return $res->withJson(['message]' => $e->getMessage()], 500);
-        }
-
-        $res->getBody()->write($parent_id);
-        return $res;
-    });
-
     // get all comments for a given blog_id
     $app->get('/all/{blog_id}[/]', function(Request $req, Response $res){
         $blog_id = $req->getAttribute('blog_id');
@@ -78,7 +27,7 @@ $app->group('/comments', function($app){
     });
 
     // PRIVATE ROUTE: post a comment
-    $app->post('/post/parent[/]', function(Request $req, Response $res){
+    $app->post('/post[/]', function(Request $req, Response $res){
         try{
             $db = Database::getInstance()->getConnection();
             $req_data = $req->getParsedBody();
@@ -104,29 +53,53 @@ $app->group('/comments', function($app){
                     ], 400);
             }
 
-            // insert comment
-            $sql = 
-            "INSERT INTO comments 
-                (blog_id, parent_id, body, likes, user_id, created_at) 
-            VALUES(:blog_id, :parent_id, :body, 0, :user_id, NOW())";
-
+            $sql = 'SELECT username from USERS WHERE user_id = :user_id';
             $stmt = $db->prepare($sql);
-            $stmt->bindParam(':blog_id', $blog_id);
-            $stmt->bindParam(':body', $body);
             $stmt->bindParam(':user_id', $user_id);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if($parent_id == ""){
-                $parent_id = NULL; // comment being posted is a parent comment
+            if($result){
+                $username = $result['username'];
+
+                // insert comment
+                $sql = 
+                "INSERT INTO comments 
+                    (blog_id, parent_id, body, likes, user_id, username, created_at) 
+                VALUES(:blog_id, :parent_id, :body, 0, :user_id, :username, NOW())";
+    
+                $stmt = $db->prepare($sql);
+                $stmt->bindParam(':blog_id', $blog_id);
+                $stmt->bindParam(':body', $body);
+                $stmt->bindParam(':user_id', $user_id);
+                $stmt->bindParam(':username', $username);
+    
+                if($parent_id == ""){
+                    $parent_id = NULL; // comment being posted is a parent comment
+                }
+    
+                $stmt->bindParam('parent_id', $parent_id);
+    
+                $stmt->execute();
+                $data = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+                $comment_id = $db->lastInsertId();
+
+                $sql = "SELECT * FROM comments WHERE comment_id = :comment_id";
+                $stmt = $db->prepare($sql);
+                $stmt->bindParam(':comment_id', $comment_id);
+                $stmt->execute();
+                $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                $res->getBody()->write(json_encode($data));
+
+                return $res->withHeader('content-type', 'application/json');
+            
+            }
+            else{
+                return $res->withJson(['message' => 'Wrong Username'], 400);
             }
 
-            $stmt->bindParam('parent_id', $parent_id);
-
-            $stmt->execute();
-            $data = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            $comment_id = $db->lastInsertId();
-
-            return $res->withJson(['comment_id' => $comment_id], 200);
 
         } catch(PDOException $e){
             return $res->withJson(['message' => $e->getMessage()], 500);

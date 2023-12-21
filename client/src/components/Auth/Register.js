@@ -6,7 +6,7 @@ import Spinner from "../Layout/Spinner";
 import Navbar from "../Layout/Navbar";
 
 export default function Register() {
-    const { register, isAuth } = useUser();
+    const { register, isAuth, error } = useUser();
     const [isLoading, setIsLoading] = useState(true);
 
     const [user, setUser] = useState({
@@ -93,6 +93,7 @@ export default function Register() {
                             Login
                         </a>
                     </p>
+                    <div className="error-msg">{error}</div>
                 </div>
             </div>
         </>

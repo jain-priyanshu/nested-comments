@@ -11,12 +11,14 @@ import setAuthToken from "../utils/setToken";
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+    const [userId, setUserId] = useState(null);
     const [isAuth, setAuth] = useState(false);
     const token = localStorage.getItem("token");
     const [blogs, setBlogs] = useState(null);
     const [currBlog, setCurrBlog] = useState(null);
     const [comments, setComments] = useState([]);
+    const [error, setError] = useState(null);
+
     const commentsByParentId = useMemo(() => {
         const group = {};
         comments.forEach((comment) => {
@@ -34,9 +36,9 @@ export const UserProvider = ({ children }) => {
         try {
             const res = await axios.get("http://localhost/users/current");
             setAuth(true);
-            // console.log(res.data);
+            setUserId(res.data[0].user_id);
         } catch (err) {
-            // console.log(err);
+            console.error(err);
         }
     };
 
@@ -55,9 +57,11 @@ export const UserProvider = ({ children }) => {
             );
             setAuth(true);
             localStorage.setItem("token", res.data.token);
+            setUserId(res.data.user_id);
             loadUser();
         } catch (err) {
-            console.log(err);
+            setError(err.response.data.message);
+            RemoveError();
         }
     };
 
@@ -79,7 +83,8 @@ export const UserProvider = ({ children }) => {
             localStorage.setItem("token", res.data.token);
             loadUser();
         } catch (err) {
-            console.log(err);
+            setError(err.response.data.message);
+            RemoveError();
         }
     };
 
@@ -124,22 +129,56 @@ export const UserProvider = ({ children }) => {
         return commentsByParentId[parent_id];
     };
 
+    // adds comments to state
+    const addComments = (comment) => {
+        setComments((prev) => {
+            return [comment, ...prev];
+        });
+    };
+
+    const postComment = async (formData) => {
+        const config = {
+            hedaers: {
+                "Content-Type": "application/JSON",
+            },
+        };
+        try {
+            const res = await axios.post(
+                "http://localhost/comments/post",
+                formData,
+                config
+            );
+            addComments(res.data);
+        } catch (err) {
+            setError(err.response.data.message);
+            console.log(err);
+            RemoveError();
+        }
+    };
+
+    const RemoveError = () => {
+        setTimeout(() => {
+            setError([]);
+        }, 3000);
+    };
+
     useEffect(() => {
         setAuthToken(token);
     }, [token]);
 
-    if (!isAuth) {
+    useEffect(() => {
         loadUser();
-    }
+    }, []);
 
     const contextValue = {
-        user,
+        userId,
         isAuth,
         blogs,
         currBlog,
         commentsByParentId,
         parentComments: commentsByParentId[null],
         comments,
+        error,
         login,
         register,
         logout,
@@ -147,6 +186,9 @@ export const UserProvider = ({ children }) => {
         getBlogById,
         getComments,
         getReplies,
+        addComments,
+        postComment,
+        loadUser,
     };
 
     return (

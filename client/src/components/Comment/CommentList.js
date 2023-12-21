@@ -1,4 +1,5 @@
 import Comment from "./Comment";
+import "./test.css";
 
 const CommentList = ({ comments }) => {
     return comments.map((comment) => (

@@ -7,16 +7,28 @@ import CommentForm from "../Comment/CommentForm";
 import CommentList from "../Comment/CommentList";
 import { useUser } from "../../context/userContext";
 import "./Blog.css";
+import "./../Comment/test.css";
 
 const BlogPage = () => {
     const { id } = useParams();
-    const { getBlogById, currBlog, getComments, parentComments, comments } =
-        useUser();
+    const {
+        getBlogById,
+        currBlog,
+        getComments,
+        parentComments,
+        postComment,
+        userId,
+        comments,
+    } = useUser();
 
     useEffect(() => {
         getBlogById(id);
         getComments(id);
     }, []);
+
+    useEffect(() => {
+        getComments(id);
+    }, [comments]);
 
     if (!currBlog) {
         return <Spinner />;
@@ -33,7 +45,11 @@ const BlogPage = () => {
                 </div>
             </div>
             <section>
-                <CommentForm />
+                <CommentForm
+                    onSubmit={postComment}
+                    blog_id={id}
+                    user_id={userId}
+                />
                 <br />
                 {parentComments != null && parentComments.length > 0 && (
                     <div className="comment-list">
