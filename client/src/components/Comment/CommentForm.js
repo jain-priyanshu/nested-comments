@@ -12,7 +12,6 @@ const CommentForm = ({
     user_id,
 }) => {
     const [message, setMessage] = useState(initialValue);
-    const { error } = useUser();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -24,6 +23,8 @@ const CommentForm = ({
         };
         onSubmit(values).then(() => setMessage(""));
     };
+
+    // console.log("Comment Form");
 
     return (
         <form onSubmit={handleSubmit}>
@@ -39,7 +40,6 @@ const CommentForm = ({
                     {loading ? "Loading" : "Post"}
                 </button>
             </div>
-            <div className="error-msg">{error}</div>
         </form>
     );
 };

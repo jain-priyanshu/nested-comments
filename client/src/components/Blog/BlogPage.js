@@ -19,6 +19,7 @@ const BlogPage = () => {
         postComment,
         userId,
         comments,
+        error,
     } = useUser();
 
     useEffect(() => {
@@ -45,6 +46,7 @@ const BlogPage = () => {
                 </div>
             </div>
             <section>
+                <div className="error-msg">{error}</div>
                 <CommentForm
                     onSubmit={postComment}
                     blog_id={id}

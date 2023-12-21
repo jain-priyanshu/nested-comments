@@ -13,11 +13,13 @@ const Comment = ({
     created_at,
     likes,
     likedByMe,
+    blog_id,
+    user_id,
 }) => {
     const [isReplying, setIsReplying] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
 
-    const { getReplies } = useUser();
+    const { getReplies, postComment } = useUser();
     const [hideReplies, setHideReplies] = useState(false);
     const replies = getReplies(comment_id);
 
@@ -57,10 +59,10 @@ const Comment = ({
                 {isReplying && (
                     <div className="mt-1 ml-3">
                         <CommentForm
-                            autoFocus
-                            onSubmit=""
-                            loading={false}
-                            error={""}
+                            onSubmit={postComment}
+                            blog_id={blog_id}
+                            user_id={user_id}
+                            parent_id={comment_id}
                         />
                     </div>
                 )}

@@ -1,9 +1,9 @@
-import { React } from "react";
+import { React, useEffect } from "react";
 import "../Layout/Navbar.css";
 import { useUser } from "../../context/userContext";
 
 const Navbar = () => {
-    const { logout } = useUser();
+    const { logout, isAuth } = useUser();
 
     return (
         <div className="navbar">
@@ -12,12 +12,17 @@ const Navbar = () => {
             </a>
             <div className="nav-list">
                 <ul className="nav__links">
-                    <li>
-                        <a href="/login">Login</a>
-                    </li>
-                    <li>
-                        <a href="/register">Register</a>
-                    </li>
+                    {!isAuth && (
+                        <>
+                            <li>
+                                <a href="/login">Login</a>
+                            </li>
+                            <li>
+                                <a href="/register">Register</a>
+                            </li>
+                        </>
+                    )}
+
                     <li>
                         <a href="/login" onClick={logout}>
                             Logout

@@ -15,6 +15,8 @@ const Home = () => {
         return <Spinner />;
     }
 
+    console.log("HOME");
+
     return (
         <div>
             <Navbar />
