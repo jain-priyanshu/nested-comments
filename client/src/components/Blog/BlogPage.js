@@ -16,8 +16,8 @@ const BlogPage = () => {
         currBlog,
         getComments,
         parentComments,
+        setComments,
         postComment,
-        userId,
         comments,
         error,
     } = useUser();
@@ -28,7 +28,7 @@ const BlogPage = () => {
     }, []);
 
     useEffect(() => {
-        getComments(id);
+        setComments(comments);
     }, [comments]);
 
     if (!currBlog) {
@@ -47,15 +47,11 @@ const BlogPage = () => {
             </div>
             <section>
                 <div className="error-msg">{error}</div>
-                <CommentForm
-                    onSubmit={postComment}
-                    blog_id={id}
-                    user_id={userId}
-                />
+                <CommentForm onSubmit={postComment} blog_id={id} />
                 <br />
                 {parentComments != null && parentComments.length > 0 && (
                     <div className="comment-list">
-                        <CommentList comments={parentComments} />
+                        <CommentList comment_list={parentComments} />
                     </div>
                 )}
             </section>

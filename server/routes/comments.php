@@ -33,7 +33,7 @@ $app->group('/comments', function($app){
             $req_data = $req->getParsedBody();
             $blog_id = $req_data['blog_id'];
             $body = $req_data['body'];
-            $user_id = $req_data['user_id'];
+            $user_id = $req->getAttribute('user_id');
             $parent_id = $req_data['parent_id'];
 
             // if body is empty or null give error

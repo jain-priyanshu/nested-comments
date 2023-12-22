@@ -3,8 +3,6 @@ import BlogItem from "./BlogItem";
 import "./Blog.css";
 
 const BlogsList = ({ blogs }) => {
-    console.log("BLOGS");
-
     return (
         <div className="blogs-container">
             {blogs.map((blog) => (

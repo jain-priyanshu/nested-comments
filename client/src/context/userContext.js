@@ -12,6 +12,7 @@ const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
     const [userId, setUserId] = useState(null);
+    const [username, setUsername] = useState(null);
     const [isAuth, setAuth] = useState(false);
     const token = localStorage.getItem("token");
     const [blogs, setBlogs] = useState(null);
@@ -37,6 +38,7 @@ export const UserProvider = ({ children }) => {
             const res = await axios.get("http://localhost/users/current");
             setAuth(true);
             setUserId(res.data[0].user_id);
+            setUsername(res.data[0].username);
         } catch (err) {
             console.error(err);
         }
@@ -132,7 +134,7 @@ export const UserProvider = ({ children }) => {
     // adds comments to state
     const addComments = (comment) => {
         setComments((prev) => {
-            return [comment, ...prev];
+            return [...prev, comment];
         });
     };
 
@@ -148,10 +150,9 @@ export const UserProvider = ({ children }) => {
                 formData,
                 config
             );
-            addComments(res.data);
+            addComments(res.data[0]);
         } catch (err) {
             setError(err.response.data.message);
-            console.log(err);
             RemoveError();
         }
     };
@@ -172,6 +173,7 @@ export const UserProvider = ({ children }) => {
 
     const contextValue = {
         userId,
+        username,
         isAuth,
         blogs,
         currBlog,
@@ -189,6 +191,7 @@ export const UserProvider = ({ children }) => {
         addComments,
         postComment,
         loadUser,
+        setComments,
     };
 
     return (

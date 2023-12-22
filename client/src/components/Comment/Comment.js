@@ -14,7 +14,6 @@ const Comment = ({
     likes,
     likedByMe,
     blog_id,
-    user_id,
 }) => {
     const [isReplying, setIsReplying] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
@@ -61,7 +60,6 @@ const Comment = ({
                         <CommentForm
                             onSubmit={postComment}
                             blog_id={blog_id}
-                            user_id={user_id}
                             parent_id={comment_id}
                         />
                     </div>
@@ -79,7 +77,7 @@ const Comment = ({
                                 onClick={() => setHideReplies(true)}
                             />
                             <div className="nested-comments">
-                                <CommentList comments={replies} />
+                                <CommentList comment_list={replies} />
                             </div>
                         </div>
                         <button

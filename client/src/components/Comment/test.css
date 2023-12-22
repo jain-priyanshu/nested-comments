@@ -17,6 +17,8 @@ button {
 
 .error-msg {
     color: hsl(0, 100%, 67%);
+    text-align: center;
+    margin-top: 20px;
 }
 
 .comments-title {

@@ -9,7 +9,6 @@ const CommentForm = ({
     initialValue = "",
     blog_id,
     parent_id = "",
-    user_id,
 }) => {
     const [message, setMessage] = useState(initialValue);
 
@@ -18,13 +17,10 @@ const CommentForm = ({
         const values = {
             body: message,
             blog_id: blog_id,
-            user_id: user_id,
             parent_id: parent_id,
         };
         onSubmit(values).then(() => setMessage(""));
     };
-
-    // console.log("Comment Form");
 
     return (
         <form onSubmit={handleSubmit}>

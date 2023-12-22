@@ -156,7 +156,7 @@ $app->group('/users', function($app){
         try{
             $db = Database::getInstance()->getConnection();
             $user_id = $req->getAttribute('user_id');
-            $stmt = $db->prepare('SELECT * FROM USERS WHERE user_id = :user_id');
+            $stmt = $db->prepare('SELECT user_id, username FROM USERS WHERE user_id = :user_id');
             $stmt->bindParam(':user_id', $user_id);
             $stmt->execute();
             $data = $stmt->fetchAll(PDO::FETCH_OBJ);

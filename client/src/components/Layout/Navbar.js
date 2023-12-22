@@ -3,13 +3,20 @@ import "../Layout/Navbar.css";
 import { useUser } from "../../context/userContext";
 
 const Navbar = () => {
-    const { logout, isAuth } = useUser();
+    const { logout, isAuth, username } = useUser();
 
     return (
         <div className="navbar">
-            <a className="logo" href="/">
-                Home
-            </a>
+            {isAuth ? (
+                <a className="logo" href="/">
+                    {username}
+                </a>
+            ) : (
+                <a className="logo" href="/">
+                    Home
+                </a>
+            )}
+
             <div className="nav-list">
                 <ul className="nav__links">
                     {!isAuth && (
