@@ -19,6 +19,7 @@ export const UserProvider = ({ children }) => {
     const [currBlog, setCurrBlog] = useState(null);
     const [comments, setComments] = useState([]);
     const [error, setError] = useState(null);
+    const [errorId, setErrorId] = useState(null);
 
     const commentsByParentId = useMemo(() => {
         const group = {};
@@ -138,10 +139,24 @@ export const UserProvider = ({ children }) => {
         });
     };
 
+    // update a comment in comments state
+    const updateComments = (id, body) => {
+        setComments((prev) => {
+            return prev.map((comment) => {
+                if (comment.comment_id == id) {
+                    return { ...comment, body };
+                } else {
+                    return comment;
+                }
+            });
+        });
+    };
+
+    // PRIVATE POST ROUTE: Adds new Comments to DB
     const postComment = async (formData) => {
         const config = {
             hedaers: {
-                "Content-Type": "application/JSON",
+                "Content-Type": "Application/JSON",
             },
         };
         try {
@@ -152,15 +167,64 @@ export const UserProvider = ({ children }) => {
             );
             addComments(res.data[0]);
         } catch (err) {
-            setError(err.response.data.message);
-            RemoveError();
+            if (formData.parent_id != "") {
+                setError(err.response.data.message);
+                setErrorId(formData.parent_id);
+                RemoveError();
+            } else {
+                setError(err.response.data.message);
+                RemoveError();
+            }
+        }
+    };
+
+    // PRIVATE PUT ROUTE: Updates existing comments in DB
+    const editComment = async (formData) => {
+        const comment_id = formData.comment_id;
+        const config = {
+            headers: {
+                "Content-Type": "Application/JSON",
+            },
+        };
+        try {
+            const res = await axios.put(
+                `http://localhost/comments/edit/${comment_id}`,
+                formData,
+                config
+            );
+            updateComments(res.data["comment_id"], res.data["message"]);
+        } catch (err) {
+            console.log(formData);
+            if (formData.comment_id != "") {
+                setError(err.response.data.message);
+                setErrorId(formData.comment_id);
+                RemoveError();
+            }
+        }
+    };
+
+    // PRIVATE PUT ROUTE: Delete existing comments.
+    // (Changes body and sets deleted column to "True")
+    const deleteComment = async (comment_id) => {
+        try {
+            const res = await axios.put(
+                `http://localhost/comments/remove/${comment_id}`
+            );
+            updateComments(res.data["comment_id"], res.data["message"]);
+        } catch (err) {
+            if (comment_id != "") {
+                setError(err.response.data.message);
+                setErrorId(comment_id);
+                RemoveError();
+            }
         }
     };
 
     const RemoveError = () => {
         setTimeout(() => {
-            setError([]);
-        }, 3000);
+            setError(null);
+            setErrorId(null);
+        }, 5000);
     };
 
     useEffect(() => {
@@ -181,6 +245,7 @@ export const UserProvider = ({ children }) => {
         parentComments: commentsByParentId[null],
         comments,
         error,
+        errorId,
         login,
         register,
         logout,
@@ -192,6 +257,8 @@ export const UserProvider = ({ children }) => {
         postComment,
         loadUser,
         setComments,
+        editComment,
+        deleteComment,
     };
 
     return (

@@ -9,6 +9,7 @@ const CommentForm = ({
     initialValue = "",
     blog_id,
     parent_id = "",
+    comment_id = "",
 }) => {
     const [message, setMessage] = useState(initialValue);
 
@@ -18,6 +19,7 @@ const CommentForm = ({
             body: message,
             blog_id: blog_id,
             parent_id: parent_id,
+            comment_id: comment_id,
         };
         onSubmit(values).then(() => setMessage(""));
     };

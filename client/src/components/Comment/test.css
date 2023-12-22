@@ -72,6 +72,7 @@ button {
 .nested-comments {
     padding-left: 0.5rem;
     flex-grow: 1;
+    
 }
 
 .nested-comments-stack {

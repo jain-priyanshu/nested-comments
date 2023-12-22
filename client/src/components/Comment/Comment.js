@@ -19,7 +19,15 @@ const Comment = ({
     const [isReplying, setIsReplying] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
 
-    const { getReplies, postComment, userId } = useUser();
+    const {
+        getReplies,
+        postComment,
+        userId,
+        editComment,
+        deleteComment,
+        error,
+        errorId,
+    } = useUser();
     const [hideReplies, setHideReplies] = useState(false);
     const replies = getReplies(comment_id);
 
@@ -31,6 +39,23 @@ const Comment = ({
     // calculates how long ago was the comment created, in minutes.
     const timeDiff = (Date.now() - new Date(created_at)) / (1000 * 60);
 
+    const onEditComment = (values) => {
+        return editComment(values).then(() => {
+            setIsEditing(false);
+        });
+    };
+
+    const onReply = (values) => {
+        return postComment(values).then(() => {
+            setIsReplying(false);
+        });
+    };
+
+    const handleDelete = (e) => {
+        e.preventDefault();
+        deleteComment(comment_id);
+    };
+
     return (
         <div className="test">
             <div className="comment">
@@ -40,11 +65,21 @@ const Comment = ({
                         {dateFormatter.format(Date.parse(created_at))}
                     </span>
                 </div>
-                {isEditing ? (
-                    <CommentForm autoFocus={true} initialValue={body} />
+                {isEditing && timeDiff <= 5.0 ? (
+                    <CommentForm
+                        autoFocus={true}
+                        initialValue={body}
+                        onSubmit={onEditComment}
+                        comment_id={comment_id}
+                        blog_id={blog_id}
+                    />
                 ) : (
                     <div className="message">{body}</div>
                 )}
+                {errorId && errorId == comment_id && (
+                    <div className="error-msg">{error}</div>
+                )}
+
                 <div className="footer">
                     <IconBtn
                         Icon={likedByMe ? FaHeart : FaRegHeart}
@@ -58,7 +93,7 @@ const Comment = ({
                         Icon={FaReply}
                         aria-label={isReplying ? "Cancel Reply" : "Reply"}
                     />
-                    {/*  can only edit is the logged in user is the comment creater, 
+                    {/*  can only edit if the logged in user, is the comment creater, 
                     and comment was posted at most 5 minutes ago. */}
                     {userId && user_id === userId && timeDiff <= 5.0 && (
                         <>
@@ -69,6 +104,7 @@ const Comment = ({
                                 aria-label={isEditing ? "Cancel Edit" : "Edit"}
                             />
                             <IconBtn
+                                onClick={handleDelete}
                                 Icon={FaTrash}
                                 aria-label="Delete"
                                 color="danger"
@@ -80,7 +116,7 @@ const Comment = ({
                     <div className="mt-1 ml-3">
                         <CommentForm
                             autoFocus={true}
-                            onSubmit={postComment}
+                            onSubmit={onReply}
                             blog_id={blog_id}
                             parent_id={comment_id}
                         />

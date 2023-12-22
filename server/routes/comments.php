@@ -110,7 +110,7 @@ $app->group('/comments', function($app){
     $app->put('/edit/{id}[/]', function(Request $req, Response $res){
         $curr = $req->getAttribute('user_id'); // logged in user
         $comment_id = $req->getAttribute('id'); // edit req for this comment
-        $message = $req->getParsedBody()['message']; // new updated message
+        $message = $req->getParsedBody()['body']; // new updated message
 
         try{
             $db = Database::getInstance()->getConnection();
@@ -141,7 +141,10 @@ $app->group('/comments', function($app){
                     $stmt->bindParam(':comment_id', $comment_id);
                     $stmt->execute();
     
-                    return $res->withJson(['message' => 'Updated Successfully'], 200);
+                    return $res->withJson([
+                        'comment_id' => $comment_id,
+                        'message' => $message
+                    ], 200);
                 }
                 else{
                     return $res->withJson([
@@ -199,7 +202,10 @@ $app->group('/comments', function($app){
                     $stmt->bindParam(':comment_id', $comment_id);
                     $stmt->execute();
 
-                    return $res->withJson(['message' => 'Deleted Successfully'], 200);
+                    return $res->withJson([
+                        'comment_id' => $comment_id,
+                        'message' => $message
+                    ], 200);
                 }
                 else{
                     return $res->withJson([
