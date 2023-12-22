@@ -106,4 +106,161 @@ $app->group('/comments', function($app){
         }
     })->add('authMiddleware');
 
+    // PRIVATE ROUTE: Update Comment
+    $app->put('/edit/{id}[/]', function(Request $req, Response $res){
+        $curr = $req->getAttribute('user_id'); // logged in user
+        $comment_id = $req->getAttribute('id'); // edit req for this comment
+        $message = $req->getParsedBody()['message']; // new updated message
+
+        try{
+            $db = Database::getInstance()->getConnection();
+            // return the user who created this comment.
+            // comment cannot be edited if deleted=1
+            $sql = "SELECT user_id from comments 
+            WHERE comment_id = :comment_id AND deleted = 0"; 
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam(':comment_id', $comment_id);
+            $stmt->execute();
+
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if($result){
+                $user_id = $result['user_id']; // user who created the comment
+
+                if($user_id === $curr){
+
+                    if($message == "" || $message == null){
+                        return $res->withJson(['message' => 'Cannot Post Empty Comments'], 400);
+                    }
+
+                    // edit comment
+                    $sql = "UPDATE comments SET body = :message 
+                    WHERE comment_id = :comment_id";
+                    $stmt = $db->prepare($sql);
+                    $stmt->bindParam(':message', $message);
+                    $stmt->bindParam(':comment_id', $comment_id);
+                    $stmt->execute();
+    
+                    return $res->withJson(['message' => 'Updated Successfully'], 200);
+                }
+                else{
+                    return $res->withJson([
+                        'message' => 'You can only edit your own comments.'
+                    ], 400);
+                }
+            }
+            else{
+                return $res->withJson(['message' => 'This comment does not exist'], 400);
+            }
+
+        } catch(PDOException $e){
+            return $res->withJson(['message' => $e->getMessage()], 500);
+        }
+
+        $res->getBody()->write("HELLO, $curr, $comment_id");
+        return $res;
+    })->add('authMiddleware');
+
+    // PRIVATE ROUTE: Delete Commment
+    $app->put('/remove/{id}[/]', function(Request $req, Response $res){
+        $curr = $req->getAttribute('user_id'); // logged in user
+        $comment_id = $req->getAttribute('id'); // delete req for this comment
+
+        // echo "Logged In user: ", $curr;
+
+        try{
+            $db = Database::getInstance()->getConnection();
+            // return the user who created this comment
+            $sql = "SELECT user_id from comments
+             WHERE comment_id = :comment_id AND deleted = 0"; 
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam(':comment_id', $comment_id);
+            $stmt->execute();
+
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if($result){
+                $user_id = $result['user_id']; // user who created the comment
+
+                if($user_id === $curr){
+                    // delete comment
+                    // body: "This comment was deleted."
+                    // how to know if this has been deleted?
+                    // we need a deleted boolean data type coloumn in Comments.
+
+                    $message = "This comment was deleted.";
+
+                    $sql = "UPDATE comments 
+                    SET body = :message, deleted = 1 
+                    WHERE comment_id = :comment_id";
+
+                    $stmt = $db->prepare($sql);
+                    $stmt->bindParam(':message', $message);
+                    $stmt->bindParam(':comment_id', $comment_id);
+                    $stmt->execute();
+
+                    return $res->withJson(['message' => 'Deleted Successfully'], 200);
+                }
+                else{
+                    return $res->withJson([
+                        'message' => 'You can only delete your own comments.'
+                    ], 400);
+                }
+            }
+            else{
+                return $res->withJson(['message' => 'This comment does not exist'], 400);
+            }
+
+        } catch(PDOException $e){
+            return $res->withJson(['message' => $e->getMessage()], 500);
+        }
+    })->add('AuthMiddleware');
+
+    // testing routes only for development
+    $app->get('/{id}[/]', function(Request $req, Response $res){
+        $comment_id = $req->getAttribute('id');
+        try{
+            $db = Database::getInstance()->getConnection();
+            $stmt = $db->prepare("SELECT * FROM comments WHERE comment_id = :comment_id");
+            $stmt->bindParam(':comment_id', $comment_id);
+            $stmt->execute();
+
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $res->getBody()->write(json_encode($results));
+
+            return $res->withHeader('content-type', 'application/json');
+        } catch(PDOException $e){
+            return $res->withJson(['message' => $e->getMessage()], 500);
+        }
+    });
+
 });
+
+// [
+//     {
+//         "comment_id": 21,
+//         "blog_id": 1,
+//         "parent_id": null,
+//         "body": "asdasd",
+//         "likes": 0,
+//         "user_id": 20,
+//         "username": "postman",
+//         "created_at": "2023-12-21 20:37:57",
+//         "deleted": 0
+//     }
+// ]
+
+// [
+//     {
+//         "comment_id": 21,
+//         "blog_id": 1,
+//         "parent_id": null,
+//         "body": "This comment was deleted.",
+//         "likes": 0,
+//         "user_id": 20,
+//         "username": "postman",
+//         "created_at": "2023-12-21 20:37:57",
+//         "deleted": 1
+//     }
+// ]
