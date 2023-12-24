@@ -1,25 +1,41 @@
 <?php
+use Dotenv\Dotenv;
 
 class Database {
     private static $instance;
     private $connection;
 
-    private $dbHost = 'localhost';
-    private $dbName = 'slim_api';
-    private $dbUser = 'root';
-    private $dbPass = '';
-
     private function __construct() {
+        $this->loadEnvironmentVariables();
         $this->connect();
     }
 
+    private function loadEnvironmentVariables() {
+        $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
+        $dotenv->load();
+    }
+
+
     private function connect() {
-        $conn_str = "mysql:host={$this->dbHost};dbname={$this->dbName};charset=utf8mb4";
+        // freedb connection
+        $dbHost = $_ENV['HOST'];
+        $dbName = $_ENV['DATABASE'];
+        $dbUser = $_ENV['USER'];
+        $dbPass = $_ENV['PASS'];
+
+
+        // localhost connection
+        // private $dbHost = 'localhost';
+        // private $dbName = 'slim_api';
+        // private $dbUser = 'root';
+        // private $dbPass = '';
+
+
+        $conn_str = "mysql:host={$dbHost};dbname={$dbName};charset=utf8mb4";
 
         try {
-            $this->connection = new PDO($conn_str, $this->dbUser, $this->dbPass);
+            $this->connection = new PDO($conn_str, $dbUser, $dbPass);
             $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
 
             // echo "Database connected successfully!";
 

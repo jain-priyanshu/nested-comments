@@ -7,7 +7,7 @@ $app->group('/blogs', function($app){
     $app->get('/all[/]', function(Request $req, Response $res){
         try{
             $db = Database::getInstance()->getConnection();
-            $stmt = $db->query("SELECT * FROM BLOGS");
+            $stmt = $db->query("SELECT * FROM blogs");
             $data = $stmt->fetchAll(PDO::FETCH_OBJ);
 
             $res->getBody()->write(json_encode($data));
@@ -15,7 +15,7 @@ $app->group('/blogs', function($app){
             return $res->withHeader('content-type', 'application/json');
 
         } catch(PDOException $e){
-            return $res->withJson(['message' => $e->message], 500);
+            return $res->withJson(['message' => $e->getMessage()], 500);
         }
     });
 
@@ -24,7 +24,7 @@ $app->group('/blogs', function($app){
 
         try{
             $db = Database::getInstance()->getConnection();
-            $sql = 'SELECT * FROM BLOGS WHERE blog_id = :id';
+            $sql = 'SELECT * FROM blogs WHERE blog_id = :id';
             $stmt = $db->prepare($sql);
             $stmt->bindParam(':id', $id);
             $stmt->execute();

@@ -53,7 +53,7 @@ $app->group('/comments', function($app){
                     ], 400);
             }
 
-            $sql = 'SELECT username from USERS WHERE user_id = :user_id';
+            $sql = 'SELECT username from users WHERE user_id = :user_id';
             $stmt = $db->prepare($sql);
             $stmt->bindParam(':user_id', $user_id);
             $stmt->execute();
@@ -66,7 +66,7 @@ $app->group('/comments', function($app){
                 $sql = 
                 "INSERT INTO comments 
                     (blog_id, parent_id, body, likes, user_id, username, created_at) 
-                VALUES(:blog_id, :parent_id, :body, 0, :user_id, :username, NOW())";
+                VALUES(:blog_id, :parent_id, :body, 0, :user_id, :username, CONVERT_TZ(now(),'+00:00','+5:30'))";
     
                 $stmt = $db->prepare($sql);
                 $stmt->bindParam(':blog_id', $blog_id);
@@ -223,6 +223,7 @@ $app->group('/comments', function($app){
     })->add('AuthMiddleware');
 
     // testing routes only for development
+    // gets single comment by id
     $app->get('/{id}[/]', function(Request $req, Response $res){
         $comment_id = $req->getAttribute('id');
         try{
@@ -242,31 +243,3 @@ $app->group('/comments', function($app){
     });
 
 });
-
-// [
-//     {
-//         "comment_id": 21,
-//         "blog_id": 1,
-//         "parent_id": null,
-//         "body": "asdasd",
-//         "likes": 0,
-//         "user_id": 20,
-//         "username": "postman",
-//         "created_at": "2023-12-21 20:37:57",
-//         "deleted": 0
-//     }
-// ]
-
-// [
-//     {
-//         "comment_id": 21,
-//         "blog_id": 1,
-//         "parent_id": null,
-//         "body": "This comment was deleted.",
-//         "likes": 0,
-//         "user_id": 20,
-//         "username": "postman",
-//         "created_at": "2023-12-21 20:37:57",
-//         "deleted": 1
-//     }
-// ]

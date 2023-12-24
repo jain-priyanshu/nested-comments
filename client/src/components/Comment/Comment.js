@@ -15,6 +15,7 @@ const Comment = ({
     likedByMe,
     blog_id,
     user_id, // user who posted this comment
+    deleted,
 }) => {
     const [isReplying, setIsReplying] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
@@ -95,22 +96,29 @@ const Comment = ({
                     />
                     {/*  can only edit if the logged in user, is the comment creater, 
                     and comment was posted at most 5 minutes ago. */}
-                    {userId && user_id === userId && timeDiff <= 5.0 && (
-                        <>
-                            <IconBtn
-                                onClick={() => setIsEditing((prev) => !prev)}
-                                isActive={isEditing}
-                                Icon={FaEdit}
-                                aria-label={isEditing ? "Cancel Edit" : "Edit"}
-                            />
-                            <IconBtn
-                                onClick={handleDelete}
-                                Icon={FaTrash}
-                                aria-label="Delete"
-                                color="danger"
-                            />
-                        </>
-                    )}
+                    {userId &&
+                        user_id === userId &&
+                        timeDiff <= 5.0 &&
+                        deleted == 0 && (
+                            <>
+                                <IconBtn
+                                    onClick={() =>
+                                        setIsEditing((prev) => !prev)
+                                    }
+                                    isActive={isEditing}
+                                    Icon={FaEdit}
+                                    aria-label={
+                                        isEditing ? "Cancel Edit" : "Edit"
+                                    }
+                                />
+                                <IconBtn
+                                    onClick={handleDelete}
+                                    Icon={FaTrash}
+                                    aria-label="Delete"
+                                    color="danger"
+                                />
+                            </>
+                        )}
                 </div>
                 {isReplying && (
                     <div className="mt-1 ml-3">

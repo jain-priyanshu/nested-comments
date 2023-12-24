@@ -211,6 +211,7 @@ button {
     display: flex;
     gap: 0.5rem;
     margin-top: 0.5rem;
+    margin-bottom: 5px;
 }
 
 .ml-3 {

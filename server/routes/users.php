@@ -28,7 +28,7 @@ $app->group('/users', function($app){
             }
 
             // check if username already exists
-            $stmt = $db->prepare('SELECT COUNT(*) FROM USERS WHERE USERNAME = :username');
+            $stmt = $db->prepare('SELECT COUNT(*) FROM users WHERE USERNAME = :username');
             $stmt->bindParam(':username', $username);
             $stmt->execute();
             $count = $stmt->fetchColumn();
@@ -40,13 +40,13 @@ $app->group('/users', function($app){
             }
 
             // Insert new user in DB
-            $sql = 'INSERT INTO USERS (username, password) VALUES(:username, :password)';
+            $sql = 'INSERT INTO users (username, password) VALUES(:username, :password)';
             $stmt = $db->prepare($sql);
             $stmt->bindParam(':username', $username);
             $stmt->bindParam(':password', $password);
             $stmt->execute();
 
-            $sql = 'SELECT user_id FROM USERS WHERE USERNAME = :username';
+            $sql = 'SELECT user_id FROM users WHERE USERNAME = :username';
             $stmt = $db->prepare($sql);
             $stmt->bindParam(':username', $username);
             $stmt->execute();
@@ -139,7 +139,7 @@ $app->group('/users', function($app){
     $app->get('/all[/]', function(Request $req, Response $res){
         try{
             $db = Database::getInstance()->getConnection();
-            $stmt = $db->query('SELECT * FROM USERS');
+            $stmt = $db->query('SELECT * FROM users');
             $data = $stmt->fetchAll(PDO::FETCH_OBJ);
 
             $res->getBody()->write(json_encode($data));
@@ -156,7 +156,7 @@ $app->group('/users', function($app){
         try{
             $db = Database::getInstance()->getConnection();
             $user_id = $req->getAttribute('user_id');
-            $stmt = $db->prepare('SELECT user_id, username FROM USERS WHERE user_id = :user_id');
+            $stmt = $db->prepare('SELECT user_id, username FROM users WHERE user_id = :user_id');
             $stmt->bindParam(':user_id', $user_id);
             $stmt->execute();
             $data = $stmt->fetchAll(PDO::FETCH_OBJ);
