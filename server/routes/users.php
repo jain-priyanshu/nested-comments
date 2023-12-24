@@ -3,12 +3,6 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 use Firebase\JWT\JWT;
-use Dotenv\Dotenv;
-
-require __DIR__ . '/../middleware/auth.php';
-
-$dotenv = Dotenv::createImmutable('../');
-$dotenv->load();
 
 $app->group('/users', function($app){
 
@@ -55,7 +49,7 @@ $app->group('/users', function($app){
 
             if($result){
                 $user_id = $result['user_id'];
-                $secretKey = $_ENV['SECRET_KEY'];
+                $secretKey = getenv('SECRET_KEY');
 
                 $payload = [
                     'user_id' => $user_id,
@@ -105,7 +99,7 @@ $app->group('/users', function($app){
 
             if($result){
                 $user_id = $result['user_id'];
-                $secretKey = $_ENV['SECRET_KEY'];
+                $secretKey = getenv('SECRET_KEY');
 
                 $payload = [
                     'user_id' => $user_id,

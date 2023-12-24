@@ -1,28 +1,20 @@
 <?php
-use Dotenv\Dotenv;
 
 class Database {
     private static $instance;
     private $connection;
 
     private function __construct() {
-        $this->loadEnvironmentVariables();
         $this->connect();
-    }
-
-    private function loadEnvironmentVariables() {
-        $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
-        $dotenv->load();
     }
 
 
     private function connect() {
         // freedb connection
-        $dbHost = $_ENV['HOST'];
-        $dbName = $_ENV['DATABASE'];
-        $dbUser = $_ENV['USER'];
-        $dbPass = $_ENV['PASS'];
-
+        $dbHost = getenv('HOST');
+        $dbName = getenv('DATABASE');
+        $dbUser = getenv('USERNAME');
+        $dbPass = getenv('PASS');
 
         // localhost connection
         // private $dbHost = 'localhost';
