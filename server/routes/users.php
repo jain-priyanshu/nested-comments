@@ -3,9 +3,10 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 use Firebase\JWT\JWT;
+use Slim\Routing\RouteCollectorProxy;
+
 
 $app->group('/users', function($app){
-
     // Register
     $app->post('/register[/]', function(Request $req, Response $res){
         try{

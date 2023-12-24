@@ -25,7 +25,8 @@ function authMiddleware(Request $req, RequestHandler $handler): Response {
     }
 
     try{
-        $decoded = verify($token, getenv('SECRET_KEY'));
+        $secretKey = getenv('SECRET_KEY');
+        $decoded = verify($token, $secretKey);
         $req = $req->withAttribute('user_id', $decoded->user_id);
         $res = $handler->handle($req); // next
 
