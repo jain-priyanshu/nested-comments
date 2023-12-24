@@ -88,4 +88,5 @@
     font-size: 16px;
     text-align: justify;
     font-family: 'Roboto', sans-serif;
+    white-space: pre-wrap;
 }

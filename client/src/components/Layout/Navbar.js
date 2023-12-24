@@ -30,11 +30,13 @@ const Navbar = () => {
                         </>
                     )}
 
-                    <li>
-                        <a href="/login" onClick={logout}>
-                            Logout
-                        </a>
-                    </li>
+                    {isAuth && (
+                        <li>
+                            <a href="/" onClick={logout}>
+                                Logout
+                            </a>
+                        </li>
+                    )}
                 </ul>
             </div>
         </div>
