@@ -1,4 +1,5 @@
 <?php
+use Dotenv\Dotenv;
 
 class Database {
     private static $instance;
@@ -15,13 +16,6 @@ class Database {
         $dbName = getenv('DATABASE');
         $dbUser = getenv('USERNAME');
         $dbPass = getenv('PASS');
-
-        // localhost connection
-        // private $dbHost = 'localhost';
-        // private $dbName = 'slim_api';
-        // private $dbUser = 'root';
-        // private $dbPass = '';
-
 
         $conn_str = "mysql:host={$dbHost};dbname={$dbName};charset=utf8mb4";
 
@@ -48,6 +42,3 @@ class Database {
     }
 
 }
-
-// $db = Database::getInstance()->getConnection();
-

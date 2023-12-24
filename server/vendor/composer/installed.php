@@ -3,7 +3,7 @@
         'name' => 'slim/slim',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '0296c0844cdc4519018a825d48959b843fb6a7ce',
+        'reference' => 'ec8f23bcc68030d3bd43c63248ff9afa1c4537c6',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -44,7 +44,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../fig/http-message-util',
             'aliases' => array(),
-            'dev_requirement' => true,
+            'dev_requirement' => false,
         ),
         'firebase/php-jwt' => array(
             'pretty_version' => 'v6.10.0',
@@ -134,7 +134,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../nyholm/psr7',
             'aliases' => array(),
-            'dev_requirement' => true,
+            'dev_requirement' => false,
         ),
         'nyholm/psr7-server' => array(
             'pretty_version' => '1.1.0',
@@ -143,7 +143,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../nyholm/psr7-server',
             'aliases' => array(),
-            'dev_requirement' => true,
+            'dev_requirement' => false,
         ),
         'phar-io/manifest' => array(
             'pretty_version' => '2.0.3',
@@ -164,7 +164,7 @@
             'dev_requirement' => true,
         ),
         'php-http/message-factory-implementation' => array(
-            'dev_requirement' => true,
+            'dev_requirement' => false,
             'provided' => array(
                 0 => '1.0',
             ),
@@ -224,9 +224,9 @@
             'dev_requirement' => true,
         ),
         'phpstan/phpdoc-parser' => array(
-            'pretty_version' => '1.24.4',
-            'version' => '1.24.4.0',
-            'reference' => '6bd0c26f3786cd9b7c359675cb789e35a8e07496',
+            'pretty_version' => '1.24.5',
+            'version' => '1.24.5.0',
+            'reference' => 'fedf211ff14ec8381c9bf5714e33a7a552dd1acc',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpstan/phpdoc-parser',
             'aliases' => array(),
@@ -242,9 +242,9 @@
             'dev_requirement' => true,
         ),
         'phpunit/php-code-coverage' => array(
-            'pretty_version' => '9.2.29',
-            'version' => '9.2.29.0',
-            'reference' => '6a3a87ac2bbe33b25042753df8195ba4aa534c76',
+            'pretty_version' => '9.2.30',
+            'version' => '9.2.30.0',
+            'reference' => 'ca2bd87d2f9215904682a9cb9bb37dda98e76089',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpunit/php-code-coverage',
             'aliases' => array(),
@@ -314,7 +314,7 @@
             'dev_requirement' => false,
         ),
         'psr/http-factory-implementation' => array(
-            'dev_requirement' => true,
+            'dev_requirement' => false,
             'provided' => array(
                 0 => '1.0',
             ),
@@ -329,7 +329,7 @@
             'dev_requirement' => false,
         ),
         'psr/http-message-implementation' => array(
-            'dev_requirement' => true,
+            'dev_requirement' => false,
             'provided' => array(
                 0 => '1.0',
             ),
@@ -368,7 +368,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../ralouphie/getallheaders',
             'aliases' => array(),
-            'dev_requirement' => true,
+            'dev_requirement' => false,
         ),
         'sebastian/cli-parser' => array(
             'pretty_version' => '1.0.1',
@@ -407,9 +407,9 @@
             'dev_requirement' => true,
         ),
         'sebastian/complexity' => array(
-            'pretty_version' => '2.0.2',
-            'version' => '2.0.2.0',
-            'reference' => '739b35e53379900cc9ac327b2147867b8b6efd88',
+            'pretty_version' => '2.0.3',
+            'version' => '2.0.3.0',
+            'reference' => '25f207c40d62b8b7aa32f5ab026c53561964053a',
             'type' => 'library',
             'install_path' => __DIR__ . '/../sebastian/complexity',
             'aliases' => array(),
@@ -452,9 +452,9 @@
             'dev_requirement' => true,
         ),
         'sebastian/lines-of-code' => array(
-            'pretty_version' => '1.0.3',
-            'version' => '1.0.3.0',
-            'reference' => 'c1c2e997aa3146983ed888ad08b15470a2e22ecc',
+            'pretty_version' => '1.0.4',
+            'version' => '1.0.4.0',
+            'reference' => 'e1e4a170560925c26d424b6a03aed157e7dcc5c5',
             'type' => 'library',
             'install_path' => __DIR__ . '/../sebastian/lines-of-code',
             'aliases' => array(),
@@ -521,7 +521,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../slim/http',
             'aliases' => array(),
-            'dev_requirement' => true,
+            'dev_requirement' => false,
         ),
         'slim/psr7' => array(
             'pretty_version' => '1.6.1',
@@ -530,12 +530,12 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../slim/psr7',
             'aliases' => array(),
-            'dev_requirement' => true,
+            'dev_requirement' => false,
         ),
         'slim/slim' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '0296c0844cdc4519018a825d48959b843fb6a7ce',
+            'reference' => 'ec8f23bcc68030d3bd43c63248ff9afa1c4537c6',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
