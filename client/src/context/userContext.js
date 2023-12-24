@@ -7,8 +7,8 @@ import React, {
 } from "react";
 import axios from "axios";
 import setAuthToken from "../utils/setToken";
-
 const UserContext = createContext();
+const api = process.env.REACT_APP_API;
 
 export const UserProvider = ({ children }) => {
     const [userId, setUserId] = useState(null);
@@ -36,7 +36,7 @@ export const UserProvider = ({ children }) => {
         }
 
         try {
-            const res = await axios.get("http://localhost/users/current");
+            const res = await axios.get(`${api}/users/current`);
             setAuth(true);
             setUserId(res.data[0].user_id);
             setUsername(res.data[0].username);
@@ -54,7 +54,7 @@ export const UserProvider = ({ children }) => {
         };
         try {
             const res = await axios.post(
-                "http://localhost/users/login",
+                `${api}/users/login`,
                 formData,
                 config
             );
@@ -78,7 +78,7 @@ export const UserProvider = ({ children }) => {
 
         try {
             const res = await axios.post(
-                "http://localhost/users/register",
+                `${api}/users/register`,
                 formData,
                 config
             );
@@ -99,7 +99,7 @@ export const UserProvider = ({ children }) => {
 
     const getBlogs = async () => {
         try {
-            const res = await axios.get("http://localhost/blogs/all");
+            const res = await axios.get(`${api}/blogs/all`);
             setBlogs(res.data);
         } catch (err) {
             console.log(err);
@@ -108,7 +108,7 @@ export const UserProvider = ({ children }) => {
 
     const getBlogById = async (id) => {
         try {
-            const res = await axios.get(`http://localhost/blogs/${id}`);
+            const res = await axios.get(`${api}/blogs/${id}`);
             setCurrBlog(res.data);
         } catch (err) {
             console.error(err);
@@ -118,9 +118,7 @@ export const UserProvider = ({ children }) => {
     // gets all comments for a blog_id
     const getComments = async (blog_id) => {
         try {
-            const res = await axios.get(
-                `http://localhost/comments/all/${blog_id}`
-            );
+            const res = await axios.get(`${api}/comments/all/${blog_id}`);
             setComments(res.data);
         } catch (err) {
             console.error(err);
@@ -161,7 +159,7 @@ export const UserProvider = ({ children }) => {
         };
         try {
             const res = await axios.post(
-                "http://localhost/comments/post",
+                `${api}/comments/post`,
                 formData,
                 config
             );
@@ -188,7 +186,7 @@ export const UserProvider = ({ children }) => {
         };
         try {
             const res = await axios.put(
-                `http://localhost/comments/edit/${comment_id}`,
+                `${api}/comments/edit/${comment_id}`,
                 formData,
                 config
             );
@@ -207,9 +205,7 @@ export const UserProvider = ({ children }) => {
     // (Changes body and sets deleted column to "True")
     const deleteComment = async (comment_id) => {
         try {
-            const res = await axios.put(
-                `http://localhost/comments/remove/${comment_id}`
-            );
+            const res = await axios.put(`${api}/comments/remove/${comment_id}`);
             updateComments(res.data["comment_id"], res.data["message"]);
         } catch (err) {
             if (comment_id != "") {
