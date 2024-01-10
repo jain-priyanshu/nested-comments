@@ -1,4 +1,4 @@
-# CodeChef Assignment
+# Nested Comments
 
 **Note: This repository will not work locally without the necessary configuration. You need a `.env` file in the server folder containing database credentials, and another `.env` file in the client folder, which will contain the API endpoint (SLIM PHP API, in this case).**
 
@@ -26,18 +26,16 @@ Next, run an Apache server on the "server/public" folder. Don't forget to modify
 #
 #
 
-To use my SLIM API (deployed on heroku):
 Create this `.env` for client folder
 ```
-REACT_APP_API=https://test-deployment-cc-95317d5525dc.herokuapp.com
+REACT_APP_API="ADD PHP API HERE"
 ```
 
-To use my FreeDB MySQL server:
 Create this `.env` for server folder
 ```
-SECRET_KEY=$ecret-k3y
-HOST=sql.freedb.tech
-DATABASE=freedb_comment-system
-USER=freedb_waterfall
-PASS=3gVjdT!tXN$YAw9
+SECRET_KEY=
+HOST=
+DATABASE=
+USER=
+PASS=
 ```
